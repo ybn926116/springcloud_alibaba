@@ -10,6 +10,13 @@ spring:
     password: Xc_cy1234#
   main:
     allow-bean-definition-overriding: true
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+    loadbalancer:
+      nacos:
+        enabled: true
 mybatis:
   configuration:
     map-underscore-to-camel-case: true

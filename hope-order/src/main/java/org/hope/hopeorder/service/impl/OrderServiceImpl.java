@@ -3,6 +3,7 @@ package org.hope.hopeorder.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.hope.hopecommon.BusinessException;
 import org.hope.hopecommon.Result;
+import org.hope.hopecommon.ResultEnum;
 import org.hope.hopeorder.entity.Order;
 import org.hope.hopeorder.feign.dto.AccountDTO;
 import org.hope.hopeorder.feign.dto.StorageDTO;
@@ -10,6 +11,7 @@ import org.hope.hopeorder.mapper.OrderMapper;
 import org.hope.hopeorder.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -20,6 +22,9 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
+    private RestTemplate restTemplate;
+
+    @Autowired
     private OrderMapper orderMapper;
 
     @Override
@@ -28,12 +33,21 @@ public class OrderServiceImpl implements OrderService {
         StorageDTO storageDTO = new StorageDTO();
         storageDTO.setCommodityCode(commodityCode);
         storageDTO.setCount(count);
+        String url = "http://hope-storage/storage/reduce-stock";
+        Result result = restTemplate.postForObject(url, storageDTO, Result.class);
+        if (result.getCode() == ResultEnum.COMMON_FAILED.getCode()) {
+            throw new BusinessException("库存不足");
+        }
 
         int price = count * 2;
         AccountDTO accountDTO = new AccountDTO();
         accountDTO.setUserId(userId);
         accountDTO.setPrice(price);
-
+        url = "http://hope-account/account/reduce-balance";
+        Result resultAccount = restTemplate.postForObject(url, accountDTO, Result.class);
+        if (resultAccount.getCode() == ResultEnum.COMMON_FAILED.getCode()) {
+            throw new BusinessException("余额不足");
+        }
         Order order = new Order();
         order.setCommodityCode(commodityCode);
         order.setCount(count);

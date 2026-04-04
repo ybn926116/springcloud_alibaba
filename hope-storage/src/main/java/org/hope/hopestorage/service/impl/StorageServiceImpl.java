@@ -22,7 +22,7 @@ public class StorageServiceImpl implements StorageService {
     @Transactional
     public void reduceStock(String commodityCode, Integer orderCount) throws BusinessException {
         checkStock(commodityCode, orderCount);
-
+        log.info("reduceStock commodityCode:{} orderCount:{}", commodityCode, orderCount);
         Timestamp updateTime = new Timestamp(System.currentTimeMillis());
         int update = storageMapper.reduceStock(commodityCode, orderCount,updateTime);
         if (update == 0) {

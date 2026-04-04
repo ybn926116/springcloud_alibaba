@@ -15,7 +15,7 @@ public interface AccountMapper {
     @Select("select money from account where user_id = #{userId}")
     Integer getBalance(@Param("userId") String userId);
 
-    @Update("UPDATE account SET money = money - #{price}, updated_time = #{updatedTime} WHERE user_id = #{userId} AND money >= #{price}")
+    @Update("UPDATE account SET money = money - #{price}, update_time = #{updatedTime} WHERE user_id = #{userId} AND money >= #{price}")
     int reduceBalance(@Param("userId") String userId,
                       @Param("price")Integer price,
                       @Param("updatedTime") Timestamp updatedTime);
