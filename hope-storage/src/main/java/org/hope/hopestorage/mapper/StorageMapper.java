@@ -1,0 +1,22 @@
+package org.hope.hopestorage.mapper;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
+import org.springframework.stereotype.Repository;
+
+import java.sql.Timestamp;
+
+@Mapper
+@Repository
+public interface StorageMapper {
+
+    @Select("SELECT `count` FROM storage WHERE commodity_code = #{commodityCode}")
+    Integer getStock(String commodityCode);
+
+    @Update("UPDATE storage SET count = count - #{count},update_time=#{updateTime} WHERE commodity_code = #{commodityCode}")
+    int reduceStock(@Param("commodityCode") String commodityCode,
+                    @Param("count") Integer orderCount,
+                    @Param("updateTime") Timestamp updateTime);
+}

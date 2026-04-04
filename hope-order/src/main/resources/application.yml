@@ -1,0 +1,15 @@
+server:
+  port: 8030
+spring:
+  application:
+    name: hope-order
+  datasource:
+    url: jdbc:mysql://localhost:3306/tlmall_order?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: Xc_cy1234#
+  main:
+    allow-bean-definition-overriding: true
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
