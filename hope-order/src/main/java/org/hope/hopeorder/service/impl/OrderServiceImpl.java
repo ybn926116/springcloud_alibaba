@@ -5,6 +5,8 @@ import org.hope.hopecommon.BusinessException;
 import org.hope.hopecommon.Result;
 import org.hope.hopecommon.ResultEnum;
 import org.hope.hopeorder.entity.Order;
+import org.hope.hopeorder.feign.AccountServiceFeignClient;
+import org.hope.hopeorder.feign.StorageServiceFeignClient;
 import org.hope.hopeorder.feign.dto.AccountDTO;
 import org.hope.hopeorder.feign.dto.StorageDTO;
 import org.hope.hopeorder.mapper.OrderMapper;
@@ -27,6 +29,12 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderMapper orderMapper;
 
+    @Autowired
+    private AccountServiceFeignClient accountService;
+
+    @Autowired
+    private StorageServiceFeignClient storageService;
+
     @Override
     public Result<?> createOrder(String userId, String commodityCode, Integer count) throws BusinessException {
 
@@ -34,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
         storageDTO.setCommodityCode(commodityCode);
         storageDTO.setCount(count);
         String url = "http://hope-storage/storage/reduce-stock";
-        Result result = restTemplate.postForObject(url, storageDTO, Result.class);
+        Result result = storageService.reduceStock(storageDTO);
         if (result.getCode() == ResultEnum.COMMON_FAILED.getCode()) {
             throw new BusinessException("库存不足");
         }
@@ -43,8 +51,9 @@ public class OrderServiceImpl implements OrderService {
         AccountDTO accountDTO = new AccountDTO();
         accountDTO.setUserId(userId);
         accountDTO.setPrice(price);
-        url = "http://hope-account/account/reduce-balance";
-        Result resultAccount = restTemplate.postForObject(url, accountDTO, Result.class);
+//        url = "http://hope-account/account/reduce-balance";
+//        Result resultAccount = restTemplate.postForObject(url, accountDTO, Result.class);
+        Result resultAccount = accountService.reduceBalance(accountDTO);
         if (resultAccount.getCode() == ResultEnum.COMMON_FAILED.getCode()) {
             throw new BusinessException("余额不足");
         }
