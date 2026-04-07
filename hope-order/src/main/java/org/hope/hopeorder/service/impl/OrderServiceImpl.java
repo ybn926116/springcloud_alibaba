@@ -66,7 +66,7 @@ public class OrderServiceImpl implements OrderService {
         order.setUserId(userId);
 
 
-        int i = orderMapper.saveOrder(new Order());
+        int i = orderMapper.saveOrder(order);
         log.info("插入订单数据:{}",order.getId());
         if (i == 0) {
             throw new BusinessException("下单失败");

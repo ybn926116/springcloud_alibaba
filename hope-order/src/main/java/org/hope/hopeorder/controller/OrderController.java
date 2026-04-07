@@ -1,5 +1,6 @@
 package org.hope.hopeorder.controller;
 
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import org.hope.hopecommon.BusinessException;
 import org.hope.hopecommon.Result;
 import org.hope.hopeorder.service.OrderService;
@@ -16,6 +17,7 @@ public class OrderController {
 
 
     @PostMapping("/create")
+    @SentinelResource
     public Result<?> createOrder(@RequestParam("userId") String userId,
                                  @RequestParam("commodityCode") String commodityCode,
                                  @RequestParam("count") Integer count) {
