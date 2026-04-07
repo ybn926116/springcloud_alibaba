@@ -3,20 +3,12 @@ server:
 spring:
   application:
     name: hope-order
-  datasource:
-    url: jdbc:mysql://localhost:3306/tlmall_order?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: Xc_cy1234#
-  main:
-    allow-bean-definition-overriding: true
   cloud:
     nacos:
-      discovery:
+      config:
         server-addr: 127.0.0.1:8848
-    loadbalancer:
-      nacos:
-        enabled: true
-mybatis:
-  configuration:
-    map-underscore-to-camel-case: true
+  config:
+    import:
+      - optional:nacos:${spring.application.name}.yml
+      - optional:nacos:db-common.yml    # 引入公共配置文件
+      - nacos:nacos-discovery.yml
