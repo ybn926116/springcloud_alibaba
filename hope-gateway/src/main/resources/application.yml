@@ -1,16 +1,19 @@
 server:
-  port: 8010
+  port: 18888
 
 spring:
   application:
-    name: hope-storage
+    name: hope-gateway
   cloud:
     nacos:
+#      discovery:
+#        server-addr: tlmall-nacos-server:8848
       config:
         server-addr: 127.0.0.1:8848
+        file-extension: yml   #\u6307\u5B9A\u914D\u7F6E\u6587\u4EF6\u6269\u5C55\u540D\u4E3Ayml
   config:
     import:
       - optional:nacos:${spring.application.name}.yml
-      - optional:nacos:db-common.yml    # 引入公共配置文件
       - nacos:nacos-discovery.yml
-      - optional:nacos:sentinel-dashboard.yml
+
+

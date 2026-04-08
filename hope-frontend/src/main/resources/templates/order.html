@@ -34,7 +34,7 @@
         var userId = $("#userId").val();
         var commodityCode = $("#commodityCode").val();
         $.ajax({
-            url: "http://127.0.0.1:8010/storage/",
+            url: "http://127.0.0.1:18888/storage/",
             type: "get",
             dataType: "json",
             data: "commodityCode=" + commodityCode,
@@ -44,7 +44,7 @@
             }
         });
         $.ajax({
-            url: "http://127.0.0.1:8020/account/",
+            url: "http://127.0.0.1:18888/account/",
             type: "get",
             dataType: "json",
             data: "userId=" + userId,
@@ -55,24 +55,25 @@
         });
         $.ajax({
             type: "POST",
-            url: "http://127.0.0.1:8030/order/create",
+            url: "http://127.0.0.1:18888/order/create",
             data: $('#orderForm').serialize(),
             dataType: 'json',
             async:false,
             success: function (res) {
                 $('#orderResultSection').append(`<p> [${getDateTime()}] ${res.message} </p>`);
                 $.ajax({
-                    url: "http://127.0.0.1:8010/storage/",
+                    url: "http://127.0.0.1:18888/storage/",
                     type: "get",
                     dataType: "json",
                     data: "commodityCode=" + commodityCode,
                     async:false,
                     success: function (res) {
+                        console.log(res);
                         $('#orderResultSection').append(`<p> [${getDateTime()}] 执行分布式业务后商品库存： ${res.data}</p>`);
                     }
                 });
                 $.ajax({
-                    url: "http://127.0.0.1:8020/account/",
+                    url: "http://127.0.0.1:18888/account/",
                     type: "get",
                     dataType: "json",
                     data: "userId=" + userId,

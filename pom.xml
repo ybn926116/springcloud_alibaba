@@ -12,6 +12,7 @@
         <module>hope-order</module>
         <module>hope-storage</module>
         <module>hope-frontend</module>
+        <module>hope-gateway</module>
     </modules>
 
     <properties>

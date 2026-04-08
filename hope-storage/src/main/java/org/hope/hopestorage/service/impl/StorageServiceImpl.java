@@ -39,6 +39,7 @@ public class StorageServiceImpl implements StorageService {
     @Override
     public Result<?> getRemainCount(String commodityCode) {
         Integer stock = storageMapper.getStock(commodityCode);
+        log.info("getRemainCount commodityCode:{} stock:{}",commodityCode,stock);
         if (stock == null) {
             throw new BusinessException("商品不存在");
         }
