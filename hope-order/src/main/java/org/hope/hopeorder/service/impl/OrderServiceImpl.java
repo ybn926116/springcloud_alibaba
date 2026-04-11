@@ -1,5 +1,6 @@
 package org.hope.hopeorder.service.impl;
 
+import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
 import org.hope.hopecommon.BusinessException;
 import org.hope.hopecommon.Result;
@@ -35,13 +36,14 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private StorageServiceFeignClient storageService;
 
+    @GlobalTransactional(name = "createOrder", rollbackFor = Exception.class)
     @Override
     public Result<?> createOrder(String userId, String commodityCode, Integer count) throws BusinessException {
 
         StorageDTO storageDTO = new StorageDTO();
         storageDTO.setCommodityCode(commodityCode);
         storageDTO.setCount(count);
-        String url = "http://hope-storage/storage/reduce-stock";
+//        String url = "http://hope-storage/storage/reduce-stock";
         Result result = storageService.reduceStock(storageDTO);
         if (result.getCode() == ResultEnum.COMMON_FAILED.getCode()) {
             throw new BusinessException("库存不足");

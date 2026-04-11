@@ -14,3 +14,4 @@ spring:
       - optional:nacos:db-common.yml    # 引入公共配置文件
       - nacos:nacos-discovery.yml
       - optional:nacos:sentinel-dashboard.yml
+      - optional:nacos:seata-client.yml
